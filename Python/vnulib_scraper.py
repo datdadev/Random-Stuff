@@ -1,10 +1,13 @@
 import os
 import requests
-from PIL import Image
-from fpdf import FPDF
+import img2pdf
 import re
+import time
 
-image_format = "png"
+start_time = time.time()
+
+image_format = "jpg"
+numPages = 157
 url_base = "https://ir.vnulib.edu.vn/flowpaper/services/view.php"
 url_params = {
     "doc": "1122469547324222540191515350393125615",
@@ -21,7 +24,7 @@ images_path = f"{folder_path}\\images"
 if not os.path.exists(images_path):
     os.makedirs(images_path)
 
-for page in range(1, 157+1):  # Download pages from 1 to 10
+for page in range(1, numPages + 1):  # Download pages from 1 to 10
     url_params["page"] = page
     response = requests.get(url_base, params=url_params, verify=False)
     
@@ -42,23 +45,17 @@ for page in range(1, 157+1):  # Download pages from 1 to 10
 
 # --- Merging Images into Pdf ---
 
-pdf_filename = "book.pdf"
-pdf = FPDF(unit="mm")
-pdf.set_auto_page_break(0)
-
 file_names = sorted(os.listdir(images_path), key=lambda name: int(re.search(r'\d+', name).group()))  # Sort numerically
 
-for index, file_name in enumerate(file_names):
-    print(f"Added file {file_name}!")
-    f = os.path.join(images_path, file_name)
-    img = Image.open(f)
-    img_width, img_height = img.size
-    pdf.add_page()
-    pdf.image(f, 0, 0, w=float(img_width * 0.16946), h=float(img_height * 0.16946))
+# Create a list of image file paths
+image_files = [os.path.join(images_path, file_name) for file_name in file_names if file_name.lower().endswith(f'.{image_format}')]
 
-print("Added all files, finishing...")
-pdf_path = os.path.join(folder_path, pdf_filename)
-pdf.output(pdf_path)
+# Create the PDF file
+pdf_filename = "book.pdf"
+with open(f"{folder_path}\\{pdf_filename}", "wb") as f:
+    f.write(img2pdf.convert(image_files))
+
 print("Done!")
+print(f"--- {time.time() - start_time} seconds for {numPages} pages ---")
 
 # --- Merging Images into Pdf ---
