@@ -4,14 +4,15 @@ from PIL import Image
 from fpdf import FPDF
 import re
 
+image_format = "png"
 url_base = "https://ir.vnulib.edu.vn/flowpaper/services/view.php"
 url_params = {
-    "doc": "50085470533997124294773261083868784762",
-    "format": "jpg",
-    "subfolder": "50/08/54/"
+    "doc": "1122469547324222540191515350393125615",
+    "format": image_format,
+    "subfolder": "11/22/46/"
 }
 
-folder_path = "D:\\LTD\\E-Book\\nguyen_ly_may"
+folder_path = "D:\\LTD\\E-Book\\nguyen_ly_may_bt"
 images_path = f"{folder_path}\\images"
 
 # --- Image Fetching ---
@@ -20,14 +21,14 @@ images_path = f"{folder_path}\\images"
 if not os.path.exists(images_path):
     os.makedirs(images_path)
 
-for page in range(1, 251+1):  # Download pages from 1 to 10
+for page in range(1, 157+1):  # Download pages from 1 to 10
     url_params["page"] = page
     response = requests.get(url_base, params=url_params, verify=False)
     
     if response.status_code == 200:
         image_url = response.content  # Binary image data, not text
         
-        image_filename = f"page_{page}.jpg"
+        image_filename = f"page_{page}.{image_format}"
         image_path = os.path.join(images_path, image_filename)
         
         with open(image_path, "wb") as image_file:
