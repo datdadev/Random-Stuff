@@ -1,4 +1,4 @@
-# VNULib-Scraper
+# VNULib-OCR-Scraper
 
 ## ABOUT
 
