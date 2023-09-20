@@ -15,6 +15,8 @@ n2 = n[1]
 n3 = n[2]
 area = 0.5 * np.abs(n1[0]*(n2[1]-n3[1]) + n2[0]*(n3[1]-n1[1]) + n3[0]*(n1[1]-n2[1]))
 
+print("Area =", area)
+
 xA, yA = nodes[3]
 z = list(map(int, sys.argv[5][1:-1].split(',')))
 interpolationFunc = [None] * 3
@@ -23,4 +25,4 @@ result = 0
 for i in range(3):
     result += z[i]*((1/(2*area))*((n[(i+1)%3][0]*n[(i+2)%3][1]-n[(i+2)%3][0]*n[(i+1)%3][1])+xA*(n[(i+1)%3][1]-n[(i+2)%3][1])+yA*(n[(i+2)%3][0]-n[(i+1)%3][0])))
 
-print(result)
+print("Result =", np.abs(result))
