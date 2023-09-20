@@ -23,6 +23,8 @@ interpolationFunc = [None] * 3
 
 result = 0
 for i in range(3):
-    result += z[i]*((1/(2*area))*((n[(i+1)%3][0]*n[(i+2)%3][1]-n[(i+2)%3][0]*n[(i+1)%3][1])+xA*(n[(i+1)%3][1]-n[(i+2)%3][1])+yA*(n[(i+2)%3][0]-n[(i+1)%3][0])))
+    r = (1/(2*area))*((n[(i+1)%3][0]*n[(i+2)%3][1]-n[(i+2)%3][0]*n[(i+1)%3][1])+xA*(n[(i+1)%3][1]-n[(i+2)%3][1])+yA*(n[(i+2)%3][0]-n[(i+1)%3][0]))
+    print("N"+str(i+1)+" =", r)
+    result += z[i]*r
 
 print("Result =", np.abs(result))
