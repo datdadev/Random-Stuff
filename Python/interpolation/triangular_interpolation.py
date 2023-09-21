@@ -6,7 +6,7 @@ if len(sys.argv) != 6:
     sys.exit(1)
 
 nodes = sys.argv
-nodes = np.array([list(map(int, node[1:-1].split(','))) for node in sys.argv[1:-1]], dtype=int)
+nodes = np.array([list(map(float, node[1:-1].split(','))) for node in sys.argv[1:-1]], dtype=float)
 
 # Calculate the area
 n = nodes[0:3]
