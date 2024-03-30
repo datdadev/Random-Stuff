@@ -10,9 +10,12 @@ from selenium.common.exceptions import NoAlertPresentException
 import time
 import json
 
+waitingTime = 1
+
 init = True
 training = True
 result = True
+isReviewMode = True # there is no table to review
 
 def get_children_text(driver, parent_element):
     """
@@ -24,7 +27,7 @@ def get_children_text(driver, parent_element):
     return children_text
 
 def start_attempt_clicker(driver):
-    button = WebDriverWait(driver, 1).until(
+    button = WebDriverWait(driver, waitingTime).until(
     EC.element_to_be_clickable((By.XPATH, '''//button[contains(text(),'Attempt quiz') 
                                 or contains(text(),'Re-attempt quiz') 
                                 or contains(text(),'Continue your attempt')]'''))
@@ -32,7 +35,7 @@ def start_attempt_clicker(driver):
     button.click()
 
     try:
-        start_attempt_button = WebDriverWait(driver, 1).until(
+        start_attempt_button = WebDriverWait(driver, waitingTime).until(
             EC.element_to_be_clickable((By.ID, "id_submitbutton"))
         )
         button_value = start_attempt_button.get_attribute("value")
@@ -66,9 +69,11 @@ def submit_all_and_finish_clicker(driver):
     last_submit_all_button.click()
 
 driver = webdriver.Chrome()
+driver.implicitly_wait(2)
+driver.set_page_load_timeout(2)
 
-url = 'http://192.168.1.32/'
-testUrl = 'http://192.168.1.32/mod/quiz/view.php?id=2'
+url = 'https://lms.hcmut.edu.vn/'
+testUrl = 'https://lms.hcmut.edu.vn/mod/quiz/view.php?id=39939'
 
 driver.get(url)
 
@@ -79,7 +84,7 @@ cookies = [
     },
     {
         'name': 'MoodleSession',
-        'value': r'dks56cgl9kdnjqprikd6ch536t'
+        'value': r'0nm7r657sji74p6irn0milpsht'
     }
 ]
 for cookie in cookies:
@@ -143,11 +148,21 @@ if init == True:
             if next_page_value.lower() == "next page":
                 next_page_button.click()
 
-    driver.get(testUrl)
+    if isReviewMode == False:
+        driver.get(testUrl)
 
-    mark = get_score(driver)
-    if mark != 0:
-        data[0]["real"] = data[0]["answers"][0]
+        mark = get_score(driver)
+        if mark != 0:
+            data[0]["real"] = data[0]["answers"][0]
+    else:
+        state_divs2 = driver.find_elements(By.XPATH, "//div[@class='state']")
+        for div_index, div in enumerate(state_divs2, start=1):
+            if div.text == "Not answered" or div.text == "Incorrect":
+                pass
+            elif div.text == "Correct":
+                data[0]["real"] = data[0]["answers"][0]
+
+        driver.get(testUrl)
 
     with open("org_quiz_data.json", "w") as json_file:
         json.dump(data, json_file)
@@ -175,6 +190,7 @@ if training == True:
     driver.get(testUrl)
 
     while progress < len(loaded_data):
+        driver.get(testUrl) # for sure
         start_attempt_clicker(driver)
 
         questionCount = 0
@@ -185,6 +201,7 @@ if training == True:
             for qtext_index, qtext_div in enumerate(qtext_divs, start=1):
                 qtext_children_text = get_children_text(driver, qtext_div)
                 question = qtext_children_text[0]
+                print(question)
 
                 question_index = None
                 for index, data in enumerate(loaded_data):
@@ -246,11 +263,23 @@ if training == True:
                     next_page_button.click()
 
         time.sleep(0.3)
-        driver.get(testUrl)
-        time.sleep(0.3)
-        mark = get_score(driver)
-        if mark != 0:
-            loaded_data[selected["questionId"]]["real"] = selected["selection"]
+
+        if isReviewMode == False:
+            driver.get(testUrl)
+            time.sleep(0.3)
+            mark = get_score(driver)
+            if mark != 0:
+                loaded_data[selected["questionId"]]["real"] = selected["selection"]
+        else:
+            state_divs2 = driver.find_elements(By.XPATH, "//div[@class='state']")
+            for div_index, div in enumerate(state_divs2, start=1):
+                if div.text == "Not answered" or div.text == "Incorrect":
+                    pass
+                elif div.text == "Correct":
+                    loaded_data[selected["questionId"]]["real"] = selected["selection"]
+                    driver.get(testUrl)
+                    time.sleep(0.3)
+                    break
 
         progress = 0
         for question in loaded_data: # for more general cases
@@ -312,7 +341,7 @@ if result == True:
     driver.get(testUrl)
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
-    with open("result.txt", "w") as txt_file:
+    with open("result.txt", "w", encoding="utf-8") as txt_file:
         txt_file.write("------\n")
         for entry in result_data:
             txt_file.write("[Q]: " + entry["question"] + "\n")

@@ -1,10 +1,13 @@
 ------
-[Q]: a
-[A]: 4
+[Q]: 
+[A]: 30
 ------
-[Q]: aa
-[A]: 2
+[Q]: Hình thức thi cuối kỳ của môn học là:
+[A]: Vẽ tay trên giấy
 ------
-[Q]: b
-[A]: 1
+[Q]: Số giờ thí nghiệm của môn học là:
+[A]: 30
+------
+[Q]: Số giờ lý thuyết của môn học là:
+[A]: 30
 ------
