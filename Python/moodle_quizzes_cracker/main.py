@@ -10,12 +10,12 @@ from selenium.common.exceptions import NoAlertPresentException
 import time
 import json
 
-waitingTime = 1
+waitingTime = 0.5
 
 init = True
 training = True
 result = True
-isReviewMode = True # there is no table to review
+isReviewMode = False # there is no table to review
 
 def get_children_text(driver, parent_element):
     """
@@ -69,11 +69,11 @@ def submit_all_and_finish_clicker(driver):
     last_submit_all_button.click()
 
 driver = webdriver.Chrome()
-driver.implicitly_wait(2)
-driver.set_page_load_timeout(2)
+# driver.implicitly_wait(1)
+# driver.set_page_load_timeout(1)
 
-url = 'https://lms.hcmut.edu.vn/'
-testUrl = 'https://lms.hcmut.edu.vn/mod/quiz/view.php?id=39939'
+url = 'http://192.168.1.32/'
+testUrl = 'http://192.168.1.32/mod/quiz/view.php?id=2'
 
 driver.get(url)
 
@@ -84,7 +84,7 @@ cookies = [
     },
     {
         'name': 'MoodleSession',
-        'value': r'0nm7r657sji74p6irn0milpsht'
+        'value': r'rdvfks6gem0o48ifa7b9nglq0r'
     }
 ]
 for cookie in cookies:
