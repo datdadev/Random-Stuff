@@ -72,8 +72,8 @@ driver = webdriver.Chrome()
 # driver.implicitly_wait(1)
 # driver.set_page_load_timeout(1)
 
-url = 'http://192.168.1.32/'
-testUrl = 'http://192.168.1.32/mod/quiz/view.php?id=2'
+url = 'https://lms.hcmut.edu.vn/'
+testUrl = 'https://lms.hcmut.edu.vn/mod/quiz/view.php?id=36259'
 
 driver.get(url)
 
@@ -84,7 +84,7 @@ cookies = [
     },
     {
         'name': 'MoodleSession',
-        'value': r'rdvfks6gem0o48ifa7b9nglq0r'
+        'value': r'bg2ejsq2stk39a54av3q00r81f'
     }
 ]
 for cookie in cookies:
