@@ -50,10 +50,6 @@ void scale_gcode(const char *input_filename, const char *output_filename, float 
         scale_coordinate(line, scale_factor);
         // Write the modified line to the output file
         fputs(line, output_file);
-        // Add the comment back if there was one
-        if (comment_start != NULL) {
-            fputs(comment_start, output_file);
-        }
     }
 
     fclose(input_file);
