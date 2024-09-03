@@ -28,7 +28,7 @@ Make sure to add Tesseract to your system's PATH variable during installation.
 
    Example:
    ```bash
-   python vnulib_scraper.py https://ir.vnulib.edu.vn/flowpaper/... 100 /path/to/save
+   python vnulib_scraper.py 'https://ir.vnulib.edu.vn/flowpaper/...' 100 /path/to/save
    ```
 
    The script will scrape images from the specified URL and convert them into a single PDF file saved in the provided folder.
@@ -60,7 +60,7 @@ Here's a sample workflow:
 4. Run `vnulib_scraper.py` to scrape images from a VNULib content URL and generate a PDF file.
 
    ```bash
-   python vnulib_scraper.py https://ir.vnulib.edu.vn/flowpaper/... 100 /path/to/save
+   python vnulib_scraper.py 'https://ir.vnulib.edu.vn/flowpaper/...' 100 /path/to/save
    ```
 
 5. Run `ocr.py` to perform OCR on the generated PDF in the specified folder.
